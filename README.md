@@ -1,2 +1,0 @@
-# ThreeJSBackground
-Created with CodeSandbox
