@@ -8,15 +8,138 @@
     />
     <title>Three.js example</title>
     <style>
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        margin: 0;
-      }
+      
+      /* import fullpage.js */
     </style>
+
+    <!-- <script src="src/index.js"></script> -->
+
+    <!-- <link rel="stylesheet" type="text/css" href="fullpage.css" />
+    
+
+    <script type="text/javascript" src="fullpage.js"></script> -->
+    <link rel="stylesheet" href="style.css">
+    <!-- import main.js -->
+    <!-- <script src="main.js"></script> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/4.0.19/fullpage.css" integrity="sha512-z04xx19bk6Q/FewwTQYDcyJsZKDglEvuszVGtMUOeaPwTl6p9oa914VzJRBDT/HLCYzG+GQ03xfOa9jCzcNLVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"/>
   </head>
-  <body>
-    <script src="src/index.js"></script>
+  <body class="scroll-container">
+    <!-- <div class="titleStart"> -->
+      
+    <!-- </div> -->
+    
+    <div class="cursor"></div>
+    <div class="firstscreen scroll-page" id="page-1">
+      <a href="#page-1">
+        <div class="blackBg">
+
+        </div>
+        <div class="titleBackground" >
+          <div class="title">
+            <h1>Zhiyuan Guo</h1>
+          </div>
+          <div class="desc">
+            <h3 class="professional"><pre>Professional</pre></h3>
+            <div class="character">
+              <span>Web Dev</span>
+              <span>Programmer</span>
+              <span>Failure</span>
+              <span>Artist</span>
+              <span>Creator</span>
+            </div>
+          </div>
+        </div>
+      </a>
+      <iframe
+      class="background"
+      src="http://192.168.1.65:9966/"></iframe>
+      <a href="#page-2"></a>
+        <div class="arrow">
+          <a href="#page-2"><span></span></a>
+          <a href="#page-2"><span></span></a>
+          <a href="#page-2"><span></span></a>
+        </div>
+      </a>
+    </div>
+    <div class="secondscreen scroll-page" id="page-2">
+      <iframe class="background2" src="http://127.0.0.1:5501/index.html"></iframe>
+      <div class="bioBody">
+        <div class="about">ABO&nbsp;&nbsp;&nbsp;UT</div>
+        <div class="me">ME</div>
+      </div>
+    </div>
+    <!-- <div class="biography">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+    </div> -->
+    <div class="circle"></div>
+
+
+
+    <!-- <script>
+      function createCustomCursor() {
+        let cursor = document.getElementById('myCustomCursor');
+  
+          if (cursor) {
+              console.log('myCustomCursor already exist');
+              //addCursorSpecialEffectToAllPageLinks(cursor);
+          } else {
+              cursor = document.createElement("div");
+              cursor.setAttribute("id", "myCustomCursor");
+              document.body.appendChild(cursor);
+  
+              initCustomCursor(cursor);
+              //addCursorSpecialEffectToAllPageLinks(cursor);
+          }
+      }
+  
+      
+      function initCustomCursor(cursor) {
+          document.body.onmousemove = function(e) {
+              cursor.style.setProperty('--x', (e.clientX) + 'px');
+              cursor.style.setProperty('--y', (e.clientY) + 'px');
+          }
+      }
+  
+      function addCursorSpecialEffectToAllPageLinks(cursor) {
+          var links = document.querySelectorAll("a");
+  
+      // This for loop is used to find all the page links and add the "myCursorHoverState" css class to create special effect on hover
+        for (var i = 0; i < links.length; i++) {
+            var link = links[i].getAttribute("href");
+            console.log(link);
+  
+            links[i].addEventListener("mouseenter", function(event) {
+                  console.log('In');
+                  cursor.classList.add("myCursorHoverState");
+            }, false);
+  
+            links[i].addEventListener("mouseleave", function(event) {
+                  console.log('Out');
+                  cursor.classList.remove("myCursorHoverState");
+            }, false);
+        }
+    }
+  
+    createCustomCursor();
+    document.onmousemove = function(e) {
+      document.body.style.setProperty('--x',(e.clientX)+'px');
+      document.body.style.setProperty('--y',(e.clientY)+'px');
+
+      var $circle = $('.circle');
+
+      function moveCircle(e) {
+        TweenLite.to($circle, 0.3, {
+          css: {
+            left: e.pageX,
+            top: e.pageY
+          }
+        });
+      }
+
+      $(window).on('mousemove', moveCircle);
+    }
+  </script> -->
   </body>
 </html>

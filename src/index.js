@@ -16,8 +16,8 @@ require("three/examples/js/postprocessing/UnrealBloomPass.js");
 require("three/examples/js/shaders/LuminosityHighPassShader.js");
 require("three/examples/js/shaders/CopyShader.js");
 
-const Stats = require("stats-js");
-const { GUI } = require("dat.gui");
+// const Stats = require("stats-js");
+// const { GUI } = require("dat.gui");
 
 const settings = {
   animate: true,
@@ -26,9 +26,9 @@ const settings = {
 };
 
 const sketch = ({ context, canvas, width, height }) => {
-  const stats = new Stats();
-  document.body.appendChild(stats.dom);
-  const gui = new GUI();
+  // const stats = new Stats();
+  // document.body.appendChild(stats.dom);
+  // const gui = new GUI();
 
   const options = {
     enableSwoopingCamera: false,
@@ -55,14 +55,29 @@ const sketch = ({ context, canvas, width, height }) => {
     antialias: false
   });
   renderer.setClearColor(0x1f1e1c, 1);
-
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
-  camera.position.set(0, 0, 5);
-
-  const controls = new THREE.OrbitControls(camera, canvas);
-  controls.enabled = !options.enableSwoopingCamera;
+  renderer.setSize(width, height);
 
   const scene = new THREE.Scene();
+
+
+
+  // Content
+  // -------
+
+  const textureLoader = new THREE.TextureLoader();
+
+  const bgTexture = textureLoader.load("src/texture.jpg");
+  const bgGeometry = new THREE.PlaneGeometry(15, 5);
+  const bgMaterial = new THREE.MeshBasicMaterial({ map: bgTexture });
+  const bgMesh = new THREE.Mesh(bgGeometry, bgMaterial);
+  bgMesh.position.set(0, 0, -1);
+  scene.add(bgMesh);
+
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.01, 100);
+  camera.position.set(0, 0, 3);
+  camera.rotation.y = 1;
+  
+
 
   const renderPass = new THREE.RenderPass(scene, camera);
   const bloomPass = new THREE.UnrealBloomPass(
@@ -76,17 +91,15 @@ const sketch = ({ context, canvas, width, height }) => {
   composer.addPass(renderPass);
   composer.addPass(bloomPass);
 
-  // Content
-  // -------
+  const controls = new THREE.OrbitControls(camera, canvas);
+  // controls.enabled = !options.enableSwoopingCamera;
+  // disable camera movement
+  controls.enablePan = false;
+  controls.enableZoom = false;
+  controls.enableRotate = false;
+  controls.enableDamping = false;
+  controls.enableKeys = false;
 
-  const textureLoader = new THREE.TextureLoader();
-
-  const bgTexture = textureLoader.load("src/texture.jpg");
-  const bgGeometry = new THREE.PlaneGeometry(5, 5);
-  const bgMaterial = new THREE.MeshBasicMaterial({ map: bgTexture });
-  const bgMesh = new THREE.Mesh(bgGeometry, bgMaterial);
-  bgMesh.position.set(0, 0, -1);
-  scene.add(bgMesh);
 
   const geometry = new THREE.RoundedBoxGeometry(1, 1, 1, 16, 0.2);
 
@@ -116,7 +129,7 @@ const sketch = ({ context, canvas, width, height }) => {
     clearcoatNormalScale: new THREE.Vector2(options.clearcoatNormalScale)
   });
 
-  const MESH_COUNT = 500;
+  const MESH_COUNT = 1000;
   const mesh = new THREE.InstancedMesh(geometry, material, MESH_COUNT);
   scene.add(mesh);
 
@@ -124,8 +137,8 @@ const sketch = ({ context, canvas, width, height }) => {
 
   const instanceData = [...Array(MESH_COUNT)].map(() => {
     const position = new THREE.Vector3(
-      1.5 * (-1 + 2 * Math.random()),
-      1.5 * (-1 + 2 * Math.random()),
+      3 * (-1 + 2 * Math.random()),
+      2 * (-1 + 2 * Math.random()),
       0.2 + (-1 + 2 * Math.random())
     );
 
@@ -160,10 +173,13 @@ const sketch = ({ context, canvas, width, height }) => {
       const data = instanceData[i];
 
       matrixDummy.position.copy(data.position);
+      matrixDummy.position.y += 1;
       matrixDummy.scale.copy(data.scale);
       matrixDummy.quaternion.setFromEuler(data.rotation);
+
       if (options.enableRotation) {
         matrixDummy.rotateOnWorldAxis(data.axis, deltaTime / data.rotateTime);
+        matrixDummy.translateOnAxis(new THREE.Vector3(0, 0, 1), 1);
         data.rotation.copy(matrixDummy.rotation);
       }
       matrixDummy.updateMatrix();
@@ -175,65 +191,65 @@ const sketch = ({ context, canvas, width, height }) => {
   // GUI
   // ---
 
-  gui.add(options, "enableSwoopingCamera").onChange((val) => {
-    controls.enabled = !val;
-    controls.reset();
-  });
+  // gui.add(options, "enableSwoopingCamera").onChange((val) => {
+  //   // controls.enabled = !val;
+  //   // controls.reset();
+  // });
 
-  gui.add(options, "enableRotation").onChange(() => {
-    mesh.rotation.set(0, 0, 0);
-  });
+  // gui.add(options, "enableRotation").onChange(() => {
+  //   mesh.rotation.set(0, 0, 0);
+  // });
 
-  gui.add(options, "transmission", 0, 1, 0.01).onChange((val) => {
-    material.transmission = val;
-  });
+  // gui.add(options, "transmission", 0, 1, 0.01).onChange((val) => {
+  //   material.transmission = val;
+  // });
 
-  gui.add(options, "thickness", 0, 5, 0.1).onChange((val) => {
-    material.thickness = val;
-  });
+  // gui.add(options, "thickness", 0, 5, 0.1).onChange((val) => {
+  //   material.thickness = val;
+  // });
 
-  gui.add(options, "roughness", 0, 1, 0.01).onChange((val) => {
-    material.roughness = val;
-  });
+  // gui.add(options, "roughness", 0, 1, 0.01).onChange((val) => {
+  //   material.roughness = val;
+  // });
 
-  gui.add(options, "envMapIntensity", 0, 3, 0.1).onChange((val) => {
-    material.envMapIntensity = val;
-  });
+  // gui.add(options, "envMapIntensity", 0, 3, 0.1).onChange((val) => {
+  //   material.envMapIntensity = val;
+  // });
 
-  gui.add(options, "clearcoat", 0, 1, 0.01).onChange((val) => {
-    material.clearcoat = val;
-  });
+  // gui.add(options, "clearcoat", 0, 1, 0.01).onChange((val) => {
+  //   material.clearcoat = val;
+  // });
 
-  gui.add(options, "clearcoatRoughness", 0, 1, 0.01).onChange((val) => {
-    material.clearcoatRoughness = val;
-  });
+  // gui.add(options, "clearcoatRoughness", 0, 1, 0.01).onChange((val) => {
+  //   material.clearcoatRoughness = val;
+  // });
 
-  gui.add(options, "normalScale", 0, 5, 0.01).onChange((val) => {
-    material.normalScale.set(val, val);
-  });
+  // gui.add(options, "normalScale", 0, 5, 0.01).onChange((val) => {
+  //   material.normalScale.set(val, val);
+  // });
 
-  gui.add(options, "clearcoatNormalScale", 0, 5, 0.01).onChange((val) => {
-    material.clearcoatNormalScale.set(val, val);
-  });
+  // gui.add(options, "clearcoatNormalScale", 0, 5, 0.01).onChange((val) => {
+  //   material.clearcoatNormalScale.set(val, val);
+  // });
 
-  gui.add(options, "normalRepeat", 1, 4, 1).onChange((val) => {
-    normalMapTexture.repeat.set(val, val);
-  });
+  // gui.add(options, "normalRepeat", 1, 4, 1).onChange((val) => {
+  //   normalMapTexture.repeat.set(val, val);
+  // });
 
-  const postprocessing = gui.addFolder("Post Processing");
-  postprocessing.open();
+  // const postprocessing = gui.addFolder("Post Processing");
+  // postprocessing.open();
 
-  postprocessing.add(options, "bloomThreshold", 0, 1, 0.01).onChange((val) => {
-    bloomPass.threshold = val;
-  });
+  // postprocessing.add(options, "bloomThreshold", 0, 1, 0.01).onChange((val) => {
+  //   bloomPass.threshold = val;
+  // });
 
-  postprocessing.add(options, "bloomStrength", 0, 5, 0.01).onChange((val) => {
-    bloomPass.strength = val;
-  });
+  // postprocessing.add(options, "bloomStrength", 0, 5, 0.01).onChange((val) => {
+  //   bloomPass.strength = val;
+  // });
 
-  postprocessing.add(options, "bloomRadius", 0, 1, 0.01).onChange((val) => {
-    bloomPass.radius = val;
-  });
+  // postprocessing.add(options, "bloomRadius", 0, 1, 0.01).onChange((val) => {
+  //   bloomPass.radius = val;
+  // });
 
   // Update
   // ------
@@ -273,24 +289,39 @@ const sketch = ({ context, canvas, width, height }) => {
       camera.updateProjectionMatrix();
     },
     render({ time, deltaTime }) {
-      stats.begin();
-      controls.update();
+      // stats.begin();
+      // controls.update();
       update(time, deltaTime);
       // renderer.render(scene, camera);
       composer.render();
-      stats.end();
+      // stats.end();
+      // console.log(camera.position)
     },
     unload() {
       geometry.dispose();
       material.dispose();
       hdrEquirect.dispose();
-      controls.dispose();
+      // controls.dispose();
       renderer.dispose();
       bloomPass.dispose();
-      gui.destroy();
-      document.body.removeChild(stats.dom);
+      // gui.destroy();
+      // document.body.removeChild(stats.dom);
     }
   };
 };
 
 canvasSketch(sketch, settings);
+
+
+// var fullpage = require('fullpage.js');
+
+// // When using fullPage extensions replace the previos require
+// // of fullpage.js for this file
+// //var fullpage = require('fullpage.js/dist/fullpage.extensions.min');
+
+// // Initializing it
+// var fullPageInstance = new fullpage('#myFullpage', {
+//     licenseKey: 'gplv3-license',
+//     navigation: true,
+//     sectionsColor:['#ff5f45', '#0798ec', '#fc6c7c', 'grey']
+// });
