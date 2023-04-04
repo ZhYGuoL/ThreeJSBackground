@@ -27,7 +27,7 @@
     <!-- <div class="titleStart"> -->
       
     <!-- </div> -->
-    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <div class="cursor"></div>
     <div class="firstscreen scroll-page" id="page-1">
       <a href="#page-1">
@@ -66,6 +66,9 @@
       <div class="bioBody">
         <div class="about">ABO&nbsp;&nbsp;&nbsp;UT</div>
         <div class="me">ME</div>
+        <div class="bio">
+          <h1 id="hdr" style="display: none; color: white;">Hello everyone lets learn javascript</h1>
+        </div>
       </div>
     </div>
     <!-- <div class="biography">
@@ -75,7 +78,36 @@
     </div> -->
     <div class="circle"></div>
 
+    <script>
+      $(function() {
+        var $header = $('#hdr');
+        
+        $header.html($.map($header.text().split(/\s+/), function(word) {
+          return '<span>' + word + '</span>';
+        }).join(' ')).children().hide().end().show();
 
+        (function fadeInNext($element) {
+          if (isInViewport($element)){
+            $element.fadeIn('slow', function() {
+              fadeInNext($element.next());
+            });
+          }
+          else{
+            fadeInNext($element.next());
+          }
+          ($header.children(':first'));
+        });
+      });
+      function isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (
+          rect.top >= 0 &&
+          rect.left >= 0 &&
+          rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+          rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+      }
+    </script>
 
     <!-- <script>
       function createCustomCursor() {

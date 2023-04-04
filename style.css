@@ -410,7 +410,7 @@ html {
 
 .bioBody {
     width: auto;
-    height: auto;
+    height: 80%;
     position: absolute;
     top: 110px;
     pointer-events: none;
@@ -440,7 +440,7 @@ html {
 
 .me {
     position: relative;
-    top: 0;
+    bottom: 0;
     width: auto;
     height: auto;
     text-align: right;
@@ -452,6 +452,16 @@ html {
     /* backdrop-filter: blur( 3px ); 
     -webkit-backdrop-filter: blur( 14.5px ); */
     pointer-events: none;
+}
+
+.bio {
+    z-index: 4;
+    position: absolute;
+    top: 130px;
+    font-family: monospace, sans-serif;
+    width: auto;
+    height: auto;
+
 }
 
 /* .cursor {

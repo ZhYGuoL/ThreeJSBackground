@@ -129,7 +129,7 @@ const sketch = ({ context, canvas, width, height }) => {
     clearcoatNormalScale: new THREE.Vector2(options.clearcoatNormalScale)
   });
 
-  const MESH_COUNT = 1000;
+  const MESH_COUNT = 400;
   const mesh = new THREE.InstancedMesh(geometry, material, MESH_COUNT);
   scene.add(mesh);
 
@@ -138,7 +138,7 @@ const sketch = ({ context, canvas, width, height }) => {
   const instanceData = [...Array(MESH_COUNT)].map(() => {
     const position = new THREE.Vector3(
       3 * (-1 + 2 * Math.random()),
-      2 * (-1 + 2 * Math.random()),
+      1 * (-1 + 2 * Math.random())-1,
       0.2 + (-1 + 2 * Math.random())
     );
 
